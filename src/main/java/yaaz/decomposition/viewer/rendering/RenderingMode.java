@@ -4,7 +4,7 @@ public enum RenderingMode {
 
 
     GRAPHICS2D(Graphics2DRenderer::new),
-    VULKAN(()->{ throw new UnsupportedOperationException(); /*TODO*/ });
+    VULKAN(VulkanRenderer::create);
 
 
     final Renderer.Constructor canvasConstructor;

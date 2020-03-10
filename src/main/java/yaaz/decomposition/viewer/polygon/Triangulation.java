@@ -23,13 +23,13 @@ public class Triangulation {
     private final long address;
     private Triangulation(long address) {
         this.address = address;
-        CLEANER.register(this, ()->cleanup(address));
+        CLEANER.register(this, ()-> destroy(address));
     }
 
 
     public static native Triangulation create(PolygonSet polygonSet);
 
-    private static native void cleanup(long address);
+    private static native void destroy(long address);
 
     public native Point2D[] getAllVertices();
 

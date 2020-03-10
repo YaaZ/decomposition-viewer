@@ -24,7 +24,7 @@ public class Frame extends JFrame {
     public Frame(RenderingMode renderingMode) {
         renderer = Renderer.create(renderingMode);
         setTitle("Decomposition viewer - Nikita Gubarkov");
-        setSize(800, 600);
+        setBounds(100, 100, 800, 600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setupContent();
     }

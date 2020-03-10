@@ -9,7 +9,7 @@ import java.awt.*;
 import java.awt.geom.Point2D;
 
 
-public class Graphics2DRenderer extends JPanel implements Renderer {
+class Graphics2DRenderer extends JPanel implements Renderer {
 
     private static final int
             VERTEX_POINT_SIZE_PX = 10,
@@ -52,8 +52,9 @@ public class Graphics2DRenderer extends JPanel implements Renderer {
     public void paint(Graphics g) {
         clear(g);
         drawAreas(g);
-        drawEdges(g);
+        drawPolygonEdges(g);
         drawVertices(g);
+        drawTriangleEdges(g);
     }
 
 
@@ -94,24 +95,12 @@ public class Graphics2DRenderer extends JPanel implements Renderer {
         }
     }
 
-    private void drawEdges(Graphics g) {
+    private void drawPolygonEdges(Graphics g) {
         if(g instanceof Graphics2D) ((Graphics2D) g).setStroke(new BasicStroke(EDGE_LINE_WIDTH_PX));
         g.setColor(EDGE_COLOR);
-        for(Polygon polygon : polygonSet.polygons) drawEdges(g, polygon);
-        if(allVertices != null && triangles != null) {
-            if(g instanceof Graphics2D) ((Graphics2D) g).setStroke(new BasicStroke(1));
-            g.setColor(TRIANGLE_EDGE_COLOR);
-            for(Triangulation.Triangle triangle : triangles) {
-                Point2D v1 = allVertices[triangle.vertex1];
-                Point2D v2 = allVertices[triangle.vertex2];
-                Point2D v3 = allVertices[triangle.vertex3];
-                g.drawLine((int) v1.getX(), (int) v1.getY(), (int) v2.getX(), (int) v2.getY());
-                g.drawLine((int) v2.getX(), (int) v2.getY(), (int) v3.getX(), (int) v3.getY());
-                g.drawLine((int) v1.getX(), (int) v1.getY(), (int) v3.getX(), (int) v3.getY());
-            }
-        }
+        for(Polygon polygon : polygonSet.polygons) drawPolygonEdges(g, polygon);
     }
-    private static void drawEdges(Graphics g, Polygon polygon) {
+    private static void drawPolygonEdges(Graphics g, Polygon polygon) {
         for (int i = 0; i < polygon.vertices.size(); i++) {
             Point2D v1 = polygon.vertices.get(i);
             Point2D v2 = polygon.vertices.get((i + 1) % polygon.vertices.size());
@@ -137,6 +126,21 @@ public class Graphics2DRenderer extends JPanel implements Renderer {
     }
     private static void drawVertex(Graphics g, Point2D vertex) {
         g.fillOval((int) (vertex.getX() - VERTEX_POINT_SIZE_PX * 0.5), (int) (vertex.getY() - VERTEX_POINT_SIZE_PX * 0.5), VERTEX_POINT_SIZE_PX, VERTEX_POINT_SIZE_PX);
+    }
+
+    private void drawTriangleEdges(Graphics g) {
+        if(allVertices != null && triangles != null) {
+            if(g instanceof Graphics2D) ((Graphics2D) g).setStroke(new BasicStroke(1));
+            g.setColor(TRIANGLE_EDGE_COLOR);
+            for(Triangulation.Triangle triangle : triangles) {
+                Point2D v1 = allVertices[triangle.vertex1];
+                Point2D v2 = allVertices[triangle.vertex2];
+                Point2D v3 = allVertices[triangle.vertex3];
+                g.drawLine((int) v1.getX(), (int) v1.getY(), (int) v2.getX(), (int) v2.getY());
+                g.drawLine((int) v2.getX(), (int) v2.getY(), (int) v3.getX(), (int) v3.getY());
+                g.drawLine((int) v1.getX(), (int) v1.getY(), (int) v3.getX(), (int) v3.getY());
+            }
+        }
     }
 
 
