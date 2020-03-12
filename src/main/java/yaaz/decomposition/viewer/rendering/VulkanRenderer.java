@@ -4,6 +4,7 @@ import yaaz.decomposition.viewer.polygon.PolygonSet;
 import yaaz.decomposition.viewer.polygon.Triangulation;
 
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.lang.ref.Cleaner;
 
 
@@ -47,11 +48,12 @@ class VulkanRenderer extends Canvas implements Renderer {
     @Override
     public void paint(Graphics g) {
         if(getBufferStrategy() == null) createBufferStrategy(2);
-        paint();
+        AffineTransform transform = getGraphicsConfiguration().getDefaultTransform();
+        paint(transform.getScaleX(), transform.getScaleY());
     }
 
 
-    private native void paint();
+    private native void paint(double scaleX, double scaleY);
 
 
 }
