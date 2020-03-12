@@ -45,7 +45,13 @@ class VulkanRenderer extends Canvas implements Renderer {
     private static native void destroy(long nativeHandle);
 
     @Override
-    public native void paint(Graphics g);
+    public void paint(Graphics g) {
+        if(getBufferStrategy() == null) createBufferStrategy(2);
+        paint();
+    }
+
+
+    private native void paint();
 
 
 }
